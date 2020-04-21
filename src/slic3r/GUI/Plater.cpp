@@ -79,6 +79,8 @@
 #include "../Utils/FixModelByWin10.hpp"
 #include "../Utils/UndoRedo.hpp"
 #include "RemovableDriveManager.hpp"
+#include "InstanceCheck.hpp"
+
 #if ENABLE_NON_STATIC_CANVAS_MANAGER
 #ifdef __APPLE__
 #include "Gizmos/GLGizmosManager.hpp"
@@ -2218,6 +2220,19 @@ Plater::priv::priv(Plater *q, MainFrame *main_frame)
 
     // Initialize the Undo / Redo stack with a first snapshot.
     this->take_snapshot(_(L("New Project")));
+
+    this->q->Bind(EVT_LOAD_MODEL_OTHER_INSTANCE, [this](LoadFromOtherInstanceEvent &evt) { 
+        this->load_files(evt.data, true, true);
+    });
+    this->q->Bind(EVT_INSTANCE_GO_TO_FRONT, [this](InstanceGoToFrontEvent &) { 
+        BOOST_LOG_TRIVIAL(debug) << "prusaslicer window going forward";
+        wxGetApp().GetTopWindow()->SetFocus();  // focus on my window
+        wxGetApp().GetTopWindow()->Raise();  // bring window to front
+        wxGetApp().GetTopWindow()->Show(true); // show the window
+        BOOST_LOG_TRIVIAL(debug) << "prusaslicer window went forward";
+    });
+	wxGetApp().other_instance_message_handler()->init(this->q);
+
 }
 
 Plater::priv::~priv()
