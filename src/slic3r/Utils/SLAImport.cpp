@@ -264,7 +264,7 @@ std::vector<ExPolygons> extract_slices_from_sla_archive(
     
         auto rings = marchsq::execute(img, 128, rstp.win);
         ExPolygons expolys = rings_to_expolygons(rings, rstp.px_w, rstp.px_h);
-    
+
         // Invert the raster transformations indicated in
         // the profile metadata
         invert_raster_trafo(expolys, rstp.trafo, rstp.width, rstp.height);
@@ -306,9 +306,9 @@ void import_sla_archive(
     
     std::vector<ExPolygons> slices =
         extract_slices_from_sla_archive(arch, rstp, progr);
-    
+   
     if (!slices.empty())
         out = slices_to_triangle_mesh(slices, 0, slicp.layerh, slicp.initial_layerh);
 }
 
-}
+} // namespace Slic3r
