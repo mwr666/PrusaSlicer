@@ -361,10 +361,10 @@ namespace MessageHandlerDBusInternal
 	    }
 	    wxGetApp().other_instance_message_handler()->handle_message(text);
 
-		//evt_handler = wxGetApp().plater();
-		//if (evt_handler) {
-			wxPostEvent(m_callback_evt_handler, InstanceGoToFrontEvent(EVT_INSTANCE_GO_TO_FRONT));
-		//}
+		evt_handler = wxGetApp().plater();
+		if (evt_handler) {
+			wxPostEvent(evt_handler, InstanceGoToFrontEvent(EVT_INSTANCE_GO_TO_FRONT));
+		}
 	}
 	//every dbus message received comes here
 	static DBusHandlerResult handle_dbus_object_message(DBusConnection *connection, DBusMessage *message, void *user_data)
@@ -460,6 +460,6 @@ void OtherInstanceMessageHandler::listen()
      
    	 dbus_connection_unref(conn);
 }
-#endif BACKGROUND_MESSAGE_LISTENER
+#endif //BACKGROUND_MESSAGE_LISTENER
 } // namespace GUI
 } // namespace Slic3r
